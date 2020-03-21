@@ -1,0 +1,35 @@
+All supported Ventilator setting with names and standard units
+
+FiO2 [%] - The volume percent oxygen in the gas mixture the patient inhales
+Maximum Inspired Flow [L/min] - Maximum amount of gas (INSPIRED?) by the patient
+Inspired Tidal Volume [L] - Volume of air (DISPLACED?) by the patient for a (SINGLE INWARD BREATH?)
+Inspiratory Time [s??] - Time over which the ventilator forces in air into the patient's lungs
+Expiratory Time?? [s??] - Time over which the ventilator allows air to flow out of patient's lungs
+SIMV [1/min] - Synchronized Intermmitent Mandatory Ventilation - the absolute minimum frequency of breaths, including patient-initiiated breaths
+IPPV [1/min] - Intermittent positive pressure ventilation (UNCLEAR WHAT THIS IS)
+PEEP [mbar] - Positive end-expiratory pressure - the pressure applied during expiration. Automatically falls below zero if patient attempts to initiate expiration.
+CPAP [mbar] - Continuous Positive Airway Pressure - pressure applied continuously to keep airways open
+Intermittend(?) PEEP [mbar] - Unclear what this setting is
+BIPAP High Pressure [mbar] - Pressure during high cycle of Bilevel Positive Airway Pressure
+BIPAP Low Pressure [mbar] - Pressure during low cycle of Bilevel Positive Airway Pressure
+BIPAP High Time [s] - Time during the high cycle of BIPAP
+BIPAP Low Time [s] - Time spent in the low-pressure cycle of BIPAP
+Apnea Time [s] - Amount of time after which patient is considered to have an apnea event???
+Assisted Spontaneous Breath [mbar] - ??? Trigger pressure to assume spontaneous breath is occuring?
+Maximum Inspiratory Airway Pressure [mbar] - Maximum pressure to apply during inspiration 
+Trigger Pressure [mbar] - ???
+Tachyapnea Frequency [1/min] - Frequency of apnea events after which a tachyapnea alarm is raised???
+Tachyapnear Duration [sec] - ???
+Flow Trigger [L/min] - ???
+ASB Ramp [s] - ???
+Flow Assist [mbar*s/L/10] - ???
+Volume Assist [mbar/L/10] - ???
+
+
+Additional Derivable / Dependent Settings
+IE Ratio [#] - Ratio of inspiratory time / expiratory time
+Ti - Seems to be an shortening of inspiratory time
+???ARPV High/Low Pressure - Airway Pressure Release Ventilation (looks like the same as BIPAP, just with different typical settings) http://rc.rcjournal.com/content/respcare/57/2/282.full.pdf
+???ARPV High/Low Time - I believe same as BIPAP???
+
+Other General Vocabulary
