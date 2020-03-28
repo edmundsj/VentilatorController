@@ -21,6 +21,11 @@ Immediately notify the user of alarms on the device, and potentially aggregate t
 ## Architecture
 Ventilators are represented as an instance of the 'Device' class.
 
+## Tests to write (to be moved to ticket system)
+- Software does not crash the ventilator if PC is powered off
+- Software can communicate with ventilator for extended period of time (days)
+- After writing settings to ventilator, settings are in fact changed
+
 ## Naming
 All alarm names are camel-case concatenated from their descriptions in the MEDIBUS for Intensive Care Devices Specification (Draeger Intensive Care Device Commands below)
 
