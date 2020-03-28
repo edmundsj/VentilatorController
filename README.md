@@ -28,12 +28,10 @@ Ventilators are represented as an instance of the 'Device' class.
 
 ## Open Questions
 - Why does the MEDIBUS specification say that the data codes are 2 bytes long, but all the data bytes specified in the ICU device command sspecification have 1-byte long data codes? This is true for alarms as well. Do we need to add some known value to these to encode them? How do the two different codepages play into this (1 and 2). I suspect we just have to add a constant value for the second codepage, but the specification is unclear.
+- How should we deal with the different codepages? Should we add a field to data codes?
 
 ## Naming
 All alarm names are camel-case concatenated from their descriptions in the MEDIBUS for Intensive Care Devices Specification (Draeger Intensive Care Device Commands below)
-
-## Current Work
-
 
 ## Documentation
 Draeger Serial MEDIBUS Protocol v. 4.0.3 (2007) https://drive.google.com/open?id=17cH-RRV5SITCA4QWiZ-h3vH5WjzPpc7X
