@@ -26,6 +26,9 @@ Ventilators are represented as an instance of the 'Device' class.
 - Software can communicate with ventilator for extended period of time (days)
 - After writing settings to ventilator, settings are in fact changed
 
+## Open Questions
+- Why does the MEDIBUS specification say that the data codes are 2 bytes long, but all the data bytes specified in the ICU device command sspecification have 1-byte long data codes? This is true for alarms as well. Do we need to add some known value to these to encode them?
+
 ## Naming
 All alarm names are camel-case concatenated from their descriptions in the MEDIBUS for Intensive Care Devices Specification (Draeger Intensive Care Device Commands below)
 
@@ -33,7 +36,7 @@ All alarm names are camel-case concatenated from their descriptions in the MEDIB
 
 
 ## Documentation
-Draeger Serial MEDIBUS Protocol v. 6.0.0 (2007) https://drive.google.com/open?id=17cH-RRV5SITCA4QWiZ-h3vH5WjzPpc7X
+Draeger Serial MEDIBUS Protocol v. 4.0.3 (2007) https://drive.google.com/open?id=17cH-RRV5SITCA4QWiZ-h3vH5WjzPpc7X
 Draeger Intensive Care Device Commands: https://drive.google.com/a/berkeley.edu/file/d/1wM04Sw83ycJRJdU-Gx0PgJyKrk5GGM0I/view?usp=sharing
 
 Maquet Serial Communication Protocol v. 9 (2011) https://drive.google.com/a/berkeley.edu/file/d/1VXPmd_Q2SK1FDuTrS6ph-TM8n-kiCO6B/view?usp=sharing
