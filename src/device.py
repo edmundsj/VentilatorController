@@ -37,6 +37,12 @@ class Device:
                     'phrase': None,
                     'description': None
                     },
+                'volumeAlarmDisabled': {
+                    'code': None,
+                    'priority': None,
+                    'phrase': None,
+                    'description': None
+                    },
                 'respiratoryRateOverHighLimit': {
                     'code': None,
                     'priority': None,

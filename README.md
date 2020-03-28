@@ -2,6 +2,9 @@
 
 Software for remote control and data readout of ICU ventilators. 
 
+## Specifications
+
+
 ## Current Work
 Currently implementing MEDIBUS protocol for Draeger Ventilators, will move on to others as needed.
 
