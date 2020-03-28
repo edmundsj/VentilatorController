@@ -3,13 +3,13 @@
 Software for remote control and data readout of ICU ventilators. 
 
 ## Specifications
-1. System State readout
+1. System State readout<br/>
 The software should be able to read out the current settings of the ventilator, including the alarm thresholds / settings, set tidal volume / PEEP / etc. 
 
-2. System State write
+2. System State write<br/>
 The software should be able to change the settings of the ventilator, including 
 
-3. Real-time data readout
+3. Real-time data readout<br/>
 Where available, the software should be able to read real-time data 
 
 ## Architecture
