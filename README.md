@@ -4,16 +4,22 @@ Software for remote control and data readout of ICU ventilators.
 
 ## Specifications
 1. System State readout<br/>
-The software should be able to read out the current settings of the ventilator, including the alarm thresholds / settings, set tidal volume / PEEP / etc. 
+Read out the current settings of the ventilator, including the alarm thresholds / settings, set tidal volume / PEEP / etc. 
 
 2. System State write<br/>
-The software should be able to change the settings of the ventilator, including 
+Change the settings of the ventilator, including tidal volume, PEEP, alarm thresholds, etc.
 
 3. Real-time data readout<br/>
-Where available, the software should be able to read real-time data 
+Where available, read real-time data  and display it in a UI similar to that of existing ventilators.
+
+4. Alarm Pass-Through and Notification<br/>
+Immediately notify the user of alarms on the device, and potentially aggregate these alarms into a single location where all ventilators can be viewed at-a-glance and selected to control.
+
+## Goals
+- Software should be as protocol-independent and device-independent as possible. Device-specific settings and commands should be separate from the implementation of the communication interface.
 
 ## Architecture
-Ventilators are represented as an instance of the 'Device' class. These devices contain all the settings
+Ventilators are represented as an instance of the 'Device' class.
 
 ## Naming
 All alarm names are camel-case concatenated from their descriptions in the MEDIBUS for Intensive Care Devices Specification (Draeger Intensive Care Device Commands below)
