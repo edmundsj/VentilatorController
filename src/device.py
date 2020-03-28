@@ -11,6 +11,7 @@ class Device:
         # In all cases, I have just compressed the short description of the alarm into camel notation, replacing
         # 'O2' with 'oxygen' and '>' with 'over' and '<' with under. Anytime there is an (Alarm) (Advisory)
         # or other thing in parentheses I have just appended that as a word.
+        self.commands = {}
         self.alarms = {}
         self.alarmLimitsRead = {}
         self.alarmLimitsWrite = {} # THIS IS NOT CURRENTLY KNOWN
@@ -19,6 +20,61 @@ class Device:
         self.measuredData = {}
         self.realtimeData = {}
         self.textMessages = {}
+
+        self.commands = {
+                'NOP': {
+                        'code': None,
+                        'description': None
+                        }
+                'initializeCommunication': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestDeviceIdentification': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestCurrentData': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestCurrentLowAlarmLimits': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestCurrentHighAlarmLimits': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestCurrentAlarms': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestCurrentDeviceSettings': {
+                        'code': None,
+                        'description': None
+                        }
+                'configureDataResponse': {
+                        'code': None,
+                        'description': None
+                        }
+                'requestRealtimeConfiguration': {
+                        'code': None,
+                        'description': None
+                        }
+                'configureRealtimeTransmission': {
+                        'code': None,
+                        'description': None
+                        }
+                'stopCommunication': {
+                        'code': None,
+                        'description': None
+                        }
+                'deviceSpecific': {
+                        'code': None,
+                        'description': None
+                        }
+                }
 
         self.alarms = {
                 'airwayPressureOverHighLimit': {
