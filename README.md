@@ -26,9 +26,13 @@ Ventilators are represented as an instance of the 'Device' class.
 - Software can communicate with ventilator for extended period of time (days)
 - After writing settings to ventilator, settings are in fact changed
 
-## Open Questions
-- Why does the MEDIBUS specification say that the data codes are 2 bytes long, but all the data bytes specified in the ICU device command sspecification have 1-byte long data codes? This is true for alarms as well. Do we need to add some known value to these to encode them? How do the two different codepages play into this (1 and 2). I suspect we just have to add a constant value for the second codepage, but the specification is unclear.
-- How should we deal with the different codepages? Should we add a field to data codes?
+## Open Questions (port to ticket system)
+
+Q: How should we deal with the different codepages? Should we add a field to data codes? Right now this information is not encoded
+
+## Closed Questions (port to ticket system)
+Q: Why does the MEDIBUS specification say that the data codes are 2 bytes long, but all the data bytes specified in the ICU device command sspecification have 1-byte long data codes? This is true for alarms as well. Do we need to add some known value to these to encode them? How do the two different codepages play into this (1 and 2)?
+A: The raw data bytes corresponding to the hex codes are not sent, but the hex codes are themselves sent as ASCII characters. For example, for the data code '0x2F', whose binary representation is 0b00101111, only one byte of information is contained, but this is sent over the interface as ASCII '2' (0x32, 0b00110010) followed by ASCII 'F' (0x46, 0b01000110). This seems awkward and annoying, but it is what it is. The codepages are dealt with separately.
 
 ## Naming
 All alarm names are camel-case concatenated from their descriptions in the MEDIBUS for Intensive Care Devices Specification (Draeger Intensive Care Device Commands below)
