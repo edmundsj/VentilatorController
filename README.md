@@ -19,7 +19,7 @@ Immediately notify the user of alarms on the device, and potentially aggregate t
 - Software should be as protocol-independent and device-independent as possible. Device-specific settings and commands should be separate from the implementation of the communication interface.
 
 ## Architecture
-The CommunicationsInterface class contains the core commands for a given set of devices (i.e. the MEDIBUS communications interface for Draeger devices). The Device class inherits from the CommunicationsInterface class (i.e. The Draeger Evita V500), which inherits all the commands from the communications interface and adds all the device-specific available settings, alarms, etc.
+The MedibusInterface class contains the core MEDIBUS protocol commands for all Draeger devices. The Device class inherits from the MedibusInterface class (i.e. The Draeger Evita V500), which inherits all the commands from the communications interface and adds all the device-specific available settings, alarms, etc.
 
 Reasoning: Since each ventilator will have device-specific commands, we want the communication interface to be modifiable on a per-device basis. However, we also want devices with common communication interfaces (MEDIBUS for Draeger) to share a common protocol. Unfortunately, the protocol between manufacturers can be so different as to make finding commonality useless, but the ventilator settings (and hence the UI) should be pretty similar.
 
