@@ -1,65 +1,84 @@
 import serial
+from auxiliary_functions import asciiBytes, numToAscii
+import numpy as np
+
 
 class MedibusInterface:
     def __init__(self, port=None, baudrate=19200, timeout=10):
         self.readBuffer = ''
         self.serialPort = serial.Serial(port=port, baudrate=baudrate)
 
-     # If I had to guess, registers 0x2A through 0x49 are where the write
-     # registers are located for the settings.
+    @staticmethod
+    def generateChecksum(myByteArray):
+        checksum = 0
+        for elem in myByteArray:
+            checksum += elem
+
+        checksum = checksum % 256
+        return numToAscii(checksum)
+
+
+    def generateCommand(self, commandString):
+        beginCommand = asciiBytes('\x1b')
+        commandCode = self.commandLookupTable[commandString]['code']
+        print("command code")
+        print(commandCode)
+        commandChecksum = self.generateChecksum(beginCommand + commandCode)
+        endCommand = asciiBytes('\r')
+        fullCommand = beginCommand + commandCode + commandChecksum + endCommand
+        return fullCommand
+
     commandLookupTable = {
         'NOP': {
-                'code': '0x30',
+                'code': asciiBytes('\x30'),
                 'description': 'Do nothing (NOP)'
                 },
         'initializeCommunication': {
-                'code': '0x51',
+                'code': asciiBytes('\x51'),
                 'description': 'Initialize Communication (ICC)'
                 },
         'requestDeviceIdentification': {
-                'code': '0x52',
+                'code': asciiBytes('\x52'),
                 'description': 'Request Device Identification'
                 },
         'requestCurrentData': {
-                'code': '0x24',
+                'code': asciiBytes('\x24'),
                 'description': 'Request current DATA'
                 },
         'requestCurrentLowAlarmLimits': {
-                'code': '0x25',
+                'code': asciiBytes('\x25'),
                 'description': 'Request current LOW ALARM LIMITS'
                 },
         'requestCurrentHighAlarmLimits': {
-                'code': '0x26',
+                'code': asciiBytes('\x26'),
                 'description': 'Request current HIGH ALARM LIMITS'
                 },
         'requestCurrentAlarms': {
-                'code': '0x27',
+                'code': asciiBytes('\x27'),
                 'description': 'Request current ALARMS'
                 },
-        # If I had to guess, registers 0x2A through 0x49 are where the write
-        # registers are located for the settings.
         'requestCurrentDeviceSettings': {
-                'code': '0x29',
+                'code': asciiBytes('\x29'),
                 'description': 'Request current DEVICE SETTINGS'
                 },
         'configureDataResponse': {
-                'code': '0x4A',
+                'code': asciiBytes('\x4A'),
                 'description': 'Configure Data Response'
                 },
         'requestRealtimeConfiguration': {
-                'code': '0x53',
+                'code': asciiBytes('\x53'),
                 'description': 'Request Realtime Configuration'
                 },
         'configureRealtimeTransmission': {
-                'code': '0x54',
+                'code': asciiBytes('\x54'),
                 'description': 'Configure Realtime Transmission'
                 },
         'stopCommunication': {
-                'code': '0x55',
+                'code': asciiBytes('\x55'),
                 'description': 'Stop Communication'
                 },
         'deviceSpecific': {
-                'code': '0x6A',
+                'code': asciiBytes('\x6A'),
                 'description': 'Device Specific'
                 }
         }

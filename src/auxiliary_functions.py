@@ -15,3 +15,6 @@ def generateChecksum(myByteArray):
 
     checksum = checksum % 256
     return numToAscii(checksum)
+
+def asciiBytes(myString):
+    return bytearray(myString, encoding='ascii')

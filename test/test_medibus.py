@@ -4,15 +4,23 @@ import sys
 sys.path.append('../src')
 from medibus_interface import MedibusInterface
 from auxiliary_functions import generateChecksum
+from auxiliary_functions import asciiBytes
 
 # Runs tests assuming that the serial port has already been opened - we mock the 
 # read and write functions of the port accordingly.
 class TestMedibusOpenPort(unittest.TestCase):
 
-    #def testGenerateCommandNOP(self):
-        #actualCommand  = self.medibus.generateCommand('NOP')
-        #desiredCommand = self.NOPCommand
-        #self.assertEqual(desiredCommand, actualCommand, msg='generate nop')
+    def testGenerateChecksum(self):
+        bytearraysToTest = [bytearray(x, encoding='ascii') for x in ['\x1b\x30', '\x1b\x51']]
+        actualChecksums = [MedibusInterface.generateChecksum(x) for x in bytearraysToTest]
+        desiredChecksums = [bytearray(x, encoding='ascii') for x in ['4B', '6C']]
+        for i in range(len(actualChecksums)):
+            self.assertEqual(desiredChecksums[i], actualChecksums[i])
+
+    def testGenerateCommandNOP(self):
+        actualCommand  = self.medibus.generateCommand('NOP')
+        desiredCommand = self.NOPCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate nop')
 
     def testGenerateCommandInitializeCommunication(self):
         actualCommand = self.medibus.generateCommand('initializeCommunication')
@@ -24,13 +32,57 @@ class TestMedibusOpenPort(unittest.TestCase):
         desiredCommand = self.stopCommunicationCommand
         self.assertEqual(desiredCommand, actualCommand, msg='generate stop communication')
 
+    def testRequestDeviceIdentification(self):
+        actualCommand = self.medibus.generateCommand('requestDeviceIdentification')
+        desiredCommand = self.requestDeviceIdentificationCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate request device identification')
+
     def testGenerateCommandRequestCurrentData(self):
         actualCommand = self.medibus.generateCommand('requestCurrentData')
         desiredCommand = self.requestCurrentDataCommand
         self.assertEqual(desiredCommand, actualCommand, msg='generate request current data')
 
+    def testGenerateCommandRequestCurrentLowAlarmLimits(self):
+        actualCommand = self.medibus.generateCommand('requestCurrentLowAlarmLimits')
+        desiredCommand = self.requestCurrentLowAlarmLimitsCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate request current low alarms')
+
+    def testGenerateRequestCurrentHighAlarmLimits(self):
+        actualCommand = self.medibus.generateCommand('requestCurrentHighAlarmLimits')
+        desiredCommand = self.requestCurrentHighAlarmLimitsCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate request current high alarms')
+
+    def testGenerateRequestCurrentAlarms(self):
+        actualCommand = self.medibus.generateCommand('requestCurrentAlarms')
+        desiredCommand = self.requestCurrentAlarmsCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate request current alarms')
+
+    def testGenerateRequestCurrentDeviceSettings(self):
+        actualCommand = self.medibus.generateCommand('requestCurrentDeviceSettings')
+        desiredCommand = self.requestCurrentDeviceSettingsCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate request current device settings')
+
+    def testConfigureDataResponse(self):
+        actualCommand = self.medibus.generateCommand('configureDataResponse')
+        desiredCommand = self.configureDataResponseCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate configure data response')
+
+    def requestRealtimeConfiguration(self):
+        actualCommand = self.medibus.generateCommand('requestRealtimeConfiguration')
+        desiredCommand = self.requestRealtimeConfigurationCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate request realtime configuration')
+
+    def configureRealtimeTransmission(self):
+        actualCommand = self.medibus.generateCommand('configureRealtimeTransmission')
+        desiredCommand = self.configureRealtimeTransmissionCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate configure realtime transmission')
+
+    def testGenerateDeviceSpecific(self):
+        actualCommand = self.medibus.generateCommand('deviceSpecific')
+        desiredCommand = self.deviceSpecificCommand
+        self.assertEqual(desiredCommand, actualCommand, msg='generate device specific')
+
     def testGenerateCommandUnrecognized(self):
-        # assert than an exception is raised if we get an unrecognized string
         with self.assertRaises(KeyError):
             command = self.medibus.generateCommand('blob')
 
@@ -41,94 +93,69 @@ class TestMedibusOpenPort(unittest.TestCase):
 
         self.medibus = MedibusInterface()
         self.medibus.serialPort.write = Mock(spec=[], side_effect=serialWriteReturnValue)
+
         self.commandBegin = bytearray('\x1b', encoding='ascii')
         self.commandEnd = bytearray('\x0d', encoding='ascii')
 
         self.NOPCode = bytearray('\x30', encoding='ascii')
-        self.NOPChecksum = generateChecksum(self.NOPCode + self.commandBegin)
-        #print(self.NOPChecksum)
-        self.NOPCommand = self.commandBegin + self.NOPCode + self.NOPChecksum + self.commandEnd
+        self.NOPChecksum = asciiBytes('4B')
+        self.NOPCommand = asciiBytes('\x1b04B\r')
 
         self.initializeCommunicationCode = bytearray('\x51', encoding='ascii')
-        self.initializeCommunicationChecksum = generateChecksum(self.initializeCommunicationCode + \
-                self.commandBegin)
-        #print(self.initializeCommunicationChecksum)
-        self.initializeCommunicationCommand = self.commandBegin + self.initializeCommunicationCode + \
-                self.initializeCommunicationChecksum + self.commandEnd
+        self.initializeCommunicationChecksum = asciiBytes('6C')
+        self.initializeCommunicationCommand = asciiBytes('\x1bQ6C\r')
 
         self.requestDeviceIdentificationCode = bytearray('\x52', encoding='ascii')
-        self.requestDeviceIdentificationChecksum = generateChecksum(self.requestDeviceIdentificationCode + \
-                self.commandBegin)
-        #print(self.requestDeviceIdentificationChecksum)
-        self.requestDeviceIdentificationCommand = self.commandBegin + self.requestDeviceIdentificationCode + \
-                self.requestDeviceIdentificationChecksum + self.commandEnd
+        self.requestDeviceIdentificationChecksum = asciiBytes('6D')
+        self.requestDeviceIdentificationCommand = asciiBytes('\x1bR6D\r')
 
         self.requestCurrentDataCode = bytearray('\x24', encoding='ascii')
-        self.requestCurrentDataChecksum = generateChecksum(self.requestCurrentDataCode + self.commandBegin)
-        #print(self.requestCurrentDataChecksum)
-        self.requestCurrentDataCommand = self.commandBegin + self.requestCurrentDataCode + \
-                self.requestCurrentDataChecksum + self.commandEnd
+        self.requestCurrentDataChecksum = asciiBytes('3F')
+        self.requestCurrentDataCommand = asciiBytes('\x1b$3F\r')
 
         self.requestCurrentLowAlarmLimitsCode = bytearray('\x25', encoding='ascii')
-        self.requestCurrentLowAlarmLimitsChecksum = generateChecksum(self.requestCurrentLowAlarmLimitsCode + \
-                self.commandBegin)
-        #print(self.requestCurrentLowAlarmLimitsChecksum)
-        self.requestCurrentLowAlarmLimitsCommand = self.commandBegin + self.requestCurrentLowAlarmLimitsCode + \
-                self.requestCurrentLowAlarmLimitsChecksum + self.commandEnd
+        self.requestCurrentLowAlarmLimitsChecksum = asciiBytes('40')
+        self.requestCurrentLowAlarmLimitsCommand = asciiBytes('\x1b%40\r')
 
         self.requestCurrentHighAlarmLimitsCode = bytearray('\x26', encoding='ascii')
-        self.requestCurrentHighAlarmLimitsChecksum = generateChecksum(self.requestCurrentHighAlarmLimitsCode + \
-                self.commandBegin)
-        self.requestCurrentHighAlarmLimitsCommand = self.commandBegin + self.requestCurrentHighAlarmLimitsCode + \
-                self.requestCurrentHighAlarmLimitsChecksum + self.commandEnd
+        self.requestCurrentHighAlarmLimitsChecksum = asciiBytes('41')
+        self.requestCurrentHighAlarmLimitsCommand = asciiBytes('\x1b&41\r')
 
         self.requestCurrentAlarmsCode = bytearray('\x27', encoding='ascii')
-        self.requestCurrentAlarmsChecksum = generateChecksum(self.requestCurrentAlarmsCode + self.commandBegin)
-        self.requestCurrentAlarmsCommand = self.commandBegin + self.requestCurrentAlarmsCode + \
-                self.requestCurrentAlarmsChecksum + self.commandEnd
+        self.requestCurrentAlarmsChecksum = asciiBytes('42')
+        self.requestCurrentAlarmsCommand = asciiBytes("\x1b\'42\r")
 
         self.requestCurrentDeviceSettingsCode = bytearray('\x29', encoding='ascii')
-        self.requestCurrentDeviceSettingsChecksum = generateChecksum(self.requestCurrentDeviceSettingsCode + \
-                self.commandBegin)
-        self.requestCurrentDeviceSettingsCommand = self.commandBegin + self.requestCurrentDeviceSettingsCode + \
-                self.requestCurrentDeviceSettingsChecksum + self.commandEnd
+        self.requestCurrentDeviceSettingsChecksum = asciiBytes('44')
+        self.requestCurrentDeviceSettingsCommand = asciiBytes('\x1b)44\r')
 
         self.requestCurrentTextMessagesCode = bytearray('\x2A', encoding='ascii')
-        self.requestCurrentTextMessagesChecksum = generateChecksum(self.requestCurrentTextMessagesCode + \
-                self.commandBegin)
-        self.requestCurrentTextMessagesCommand = self.commandBegin + self.requestCurrentTextMessagesCode + \
-                self.requestCurrentTextMessagesChecksum + self.commandEnd
+        self.requestCurrentTextMessagesChecksum = asciiBytes('45')
+        self.requestCurrentTextMessagesCommand = asciiBytes('\x1b*45\r')
 
         self.configureDataResponseCode = bytearray('\x4A', encoding='ascii')
-        self.configureDataResponseChecksum = generateChecksum(self.configureDataResponseCode + self.commandBegin)
-        self.configureDataResponseCommand = self.commandBegin + self.configureDataResponseCode + \
-                self.configureDataResponseChecksum + self.commandEnd
+        self.configureDataResponseChecksum = asciiBytes('65')
+        self.configureDataResponseCommand = asciiBytes('\x1bJ65\r')
 
         self.requestRealtimeConfigurationCode = bytearray('\x53', encoding='ascii')
-        self.requestRealtimeConfigurationChecksum = generateChecksum(self.requestRealtimeConfigurationCode + \
-                self.commandBegin)
-        self.requestRealtimeConfigurationCommand = self.commandBegin + self.requestRealtimeConfigurationCode + \
-                self.requestRealtimeConfigurationChecksum + self.commandEnd
+        self.requestRealtimeConfigurationChecksum = asciiBytes('6E')
+        self.requestRealtimeConfigurationCommand = asciiBytes('\x1bS6E\r')
 
         self.configureRealtimeTransmissionCode = bytearray('\x54', encoding='ascii')
-        self.configureRealtimeTransmissionChecksum = generateChecksum(self.configureRealtimeTransmissionCode + \
-                self.commandBegin)
-        self.configureRealtimeTransmissionCommand = self.commandBegin + self.configureRealtimeTransmissionCode + \
-                self.configureRealtimeTransmissionChecksum + self.commandEnd
+        self.configureRealtimeTransmissionChecksum = asciiBytes('6F')
+        self.configureRealtimeTransmissionCommand = asciiBytes('\x1bT6F\r')
 
         self.stopCommunicationCode = bytearray('\x55', encoding='ascii')
-        self.stopCommunicationChecksum = generateChecksum(self.stopCommunicationCode + self.commandBegin)
-        self.stopCommunicationCommand = self.commandBegin + self.stopCommunicationCode + \
-                self.stopCommunicationChecksum + self.commandEnd
+        self.stopCommunicationChecksum = asciiBytes('70')
+        self.stopCommunicationCommand = asciiBytes('\x1bU70\r')
 
         self.deviceSpecificCode = bytearray('\x6A', encoding='ascii')
-        self.deviceSpecificChecksum = generateChecksum(self.deviceSpecificCode + self.commandBegin)
-        self.deviceSpecificCommand = self.commandBegin + self.deviceSpecificCode + \
-                self.deviceSpecificChecksum + self.commandEnd
+        self.deviceSpecificChecksum = asciiBytes('85')
+        self.deviceSpecificCommand = asciiBytes('\x1bj85\r')
 
         # TEMPORARY - MOCK THE CLASS FUNCTIONS TO FAIL THE TESTS
         self.medibus.writeCommand = Mock(spec=[], side_effect=NotImplementedError)
-        self.medibus.generateCommand = Mock(spec=[], side_effect=NotImplementedError)
+        #self.medibus.generateCommand = Mock(spec=[], side_effect=NotImplementedError)
 
 
 if __name__ == '__main__':

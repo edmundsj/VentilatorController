@@ -1,6 +1,6 @@
 import sys
 sys.path.append('../src')
-from auxiliary_functions import numToAscii, generateChecksum
+from auxiliary_functions import numToAscii
 import unittest
 
 class TestAuxiliaryFunctions(unittest.TestCase):
@@ -13,14 +13,6 @@ class TestAuxiliaryFunctions(unittest.TestCase):
             byteRepresentationActual = numToAscii(numbersToTest[i])
             byteRepresentationDesired = byteRepresentationsDesired[i]
             self.assertEqual(byteRepresentationActual, byteRepresentationDesired)
-
-    def testGenerateChecksum(self):
-        bytearraysToTest = [bytearray(x, encoding='ascii') for x in ['\x1b\x30', '\x1b\x51']]
-        actualChecksums = [generateChecksum(x) for x in bytearraysToTest]
-        desiredChecksums = [bytearray(x, encoding='ascii') for x in ['4B', '6C']]
-        for i in range(len(actualChecksums)):
-            self.assertEqual(actualChecksums[i], desiredChecksums[i])
-
 
 if __name__ == '__main__':
     unittest.main()
