@@ -34,6 +34,8 @@ Q: How should we deal with the different codepages? Should we add a field to dat
 
 Q: There is a slight difference in naming some commands between the MEDIBUS specification and the MEDIBUS for Intensive Care Devices. Which should take precedence / how should we name things? A couple of these have not been added for this reason (including the codepage 2 commands).
 
+Q: Do we want to implement commands with arguments (it seems like the only function of this is to reduce the amount of information we get back - I think we only need to implement this if speed becomes a serious issue).
+
 ## Closed Questions (port to ticket system)
 Q: Why does the MEDIBUS specification say that the data codes are 2 bytes long, but all the data bytes specified in the ICU device command sspecification have 1-byte long data codes? This is true for alarms as well. Do we need to add some known value to these to encode them? How do the two different codepages play into this (1 and 2)?
 A: The raw data bytes corresponding to the hex codes are not sent, but the hex codes are themselves sent as ASCII characters. For example, for the data code '0x2F', whose binary representation is 0b00101111, only one byte of information is contained, but this is sent over the interface as ASCII '2' (0x32, 0b00110010) followed by ASCII 'F' (0x46, 0b01000110). This seems awkward and annoying, but it is what it is. The codepages are dealt with separately.
